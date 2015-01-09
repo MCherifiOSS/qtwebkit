@@ -4074,14 +4074,23 @@ enable?(VIDEO_TRACK) {
         rendering/RenderTextTrackCue.cpp
 
     use?(GSTREAMER) {
+
         HEADERS += \
             platform/graphics/gstreamer/TrackPrivateBaseGStreamer.h \
             platform/graphics/gstreamer/VideoTrackPrivateGStreamer.h \
-            platform/graphics/gstreamer/AudioTrackPrivateGStreamer.h
+            platform/graphics/gstreamer/AudioTrackPrivateGStreamer.h \
+            platform/graphics/gstreamer/InbandMetadataTextTrackPrivateGStreamer.h \
+            platform/graphics/gstreamer/InbandTextTrackPrivateGStreamer.h \
+            platform/graphics/gstreamer/TextCombinerGStreamer.h \
+            platform/graphics/gstreamer/TextSinkGStreamer.h
+
         SOURCES += \
             platform/graphics/gstreamer/TrackPrivateBaseGStreamer.cpp \
             platform/graphics/gstreamer/VideoTrackPrivateGStreamer.cpp \
-            platform/graphics/gstreamer/AudioTrackPrivateGStreamer.cpp
+            platform/graphics/gstreamer/AudioTrackPrivateGStreamer.cpp \
+            platform/graphics/gstreamer/InbandTextTrackPrivateGStreamer.cpp \
+            platform/graphics/gstreamer/TextCombinerGStreamer.cpp \
+            platform/graphics/gstreamer/TextSinkGStreamer.cpp
     }
 }
 
