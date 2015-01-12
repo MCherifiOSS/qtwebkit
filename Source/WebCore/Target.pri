@@ -3997,18 +3997,34 @@ enable?(VIDEO_TRACK) {
         html/HTMLTrackElement.h \
         html/track/AudioTrack.h \
         html/track/AudioTrackList.h \
+        html/track/AudioTrack.idl \
+        html/track/AudioTrackList.idl \
+        html/track/DataCue.h \
+        html/track/DataCue.idl \
         html/track/InbandTextTrack.h \
+        html/track/InbandDataTextTrack.h \
+        html/track/InbandGenericTextTrack.h \
+        html/track/InbandWebVTTTextTrack.h \
         html/track/LoadableTextTrack.h \
         html/track/TextTrack.h \
         html/track/TextTrackCue.h \
         html/track/TextTrackCueGeneric.h \
         html/track/TextTrackCueList.h \
         html/track/TextTrackList.h \
+        html/track/TextTrackCue.idl \
+        html/track/TextTrackCueList.idl \
+        html/track/TextTrack.idl \
+        html/track/TextTrackList.idl \
+        html/track/TextTrackRegion.idl \
+        html/track/TextTrackRegionList.idl \
         html/track/TrackBase.h \
         html/track/TrackEvent.h \
+        html/track/TrackEvent.idl \
         html/track/TrackListBase.h \
         html/track/VideoTrack.h \
         html/track/VideoTrackList.h \
+        html/track/VideoTrack.idl \
+        html/track/VideoTrackList.idl \
         html/track/WebVTTParser.h \
         html/track/WebVTTToken.h \
         html/track/WebVTTTokenizer.h \
@@ -4018,6 +4034,7 @@ enable?(VIDEO_TRACK) {
         platform/graphics/InbandTextTrackPrivateClient.h \
         platform/graphics/TrackPrivateBase.h \
         platform/graphics/VideoTrackPrivate.h
+
 
     SOURCES += \
         bindings/js/JSAudioTrackCustom.cpp \
@@ -4032,7 +4049,11 @@ enable?(VIDEO_TRACK) {
         html/HTMLTrackElement.cpp \
         html/track/AudioTrack.cpp \
         html/track/AudioTrackList.cpp \
+        html/track/DataCue.cpp \
         html/track/InbandTextTrack.cpp \
+        html/track/InbandDataTextTrack.cpp \
+        html/track/InbandGenericTextTrack.cpp \
+        html/track/InbandWebVTTTextTrack.cpp \
         html/track/LoadableTextTrack.cpp \
         html/track/TextTrack.cpp \
         html/track/TextTrackCue.cpp \
