@@ -31,11 +31,12 @@
 #include "InbandTextTrack.h"
 #include "WebVTTParser.h"
 #include <memory>
+#include <wtf/OwnPtr.h>
 #include <wtf/RefPtr.h>
 
 namespace WebCore {
 
-class InbandWebVTTTextTrack final : public InbandTextTrack, private WebVTTParserClient {
+class InbandWebVTTTextTrack FINAL : public InbandTextTrack, private WebVTTParserClient {
 public:
     static PassRefPtr<InbandTextTrack> create(ScriptExecutionContext*, TextTrackClient*, PassRefPtr<InbandTextTrackPrivate>);
     virtual ~InbandWebVTTTextTrack();
@@ -44,16 +45,16 @@ private:
     InbandWebVTTTextTrack(ScriptExecutionContext*, TextTrackClient*, PassRefPtr<InbandTextTrackPrivate>);
 
     WebVTTParser& parser();
-    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const char* data, unsigned length) override;
-    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const ISOWebVTTCue&) override;
+    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const char* data, unsigned length) OVERRIDE;
+    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const ISOWebVTTCue&) OVERRIDE;
 
-    virtual void newCuesParsed() override;
+    virtual void newCuesParsed() OVERRIDE;
 #if ENABLE(WEBVTT_REGIONS)
-    virtual void newRegionsParsed() override;
+    virtual void newRegionsParsed() OVERRIDE;
 #endif
-    virtual void fileFailedToParse() override;
+    virtual void fileFailedToParse() OVERRIDE;
 
-    std::unique_ptr<WebVTTParser> m_webVTTParser;
+    OwnPtr<WebVTTParser> m_webVTTParser;
 };
 
 } // namespace WebCore

@@ -40,12 +40,12 @@ public:
     static PassRefPtr<InbandTextTrack> create(ScriptExecutionContext*, TextTrackClient*, PassRefPtr<InbandTextTrackPrivate>);
     virtual ~InbandTextTrack();
 
-    virtual bool isClosedCaptions() const override;
-    virtual bool isSDH() const override;
-    virtual bool containsOnlyForcedSubtitles() const override;
-    virtual bool isMainProgramContent() const override;
-    virtual bool isEasyToRead() const override;
-    virtual void setMode(const AtomicString&) override;
+    virtual bool isClosedCaptions() const OVERRIDE;
+    virtual bool isSDH() const OVERRIDE;
+    virtual bool containsOnlyForcedSubtitles() const OVERRIDE;
+    virtual bool isMainProgramContent() const OVERRIDE;
+    virtual bool isEasyToRead() const OVERRIDE;
+    virtual void setMode(const AtomicString&) OVERRIDE;
     size_t inbandTrackIndex();
 
     virtual AtomicString inBandMetadataTrackDispatchType() const;
@@ -61,32 +61,32 @@ protected:
     RefPtr<InbandTextTrackPrivate> m_private;
 
 private:
-    virtual bool isInband() const override final { return true; }
-    virtual void idChanged(TrackPrivateBase*, const AtomicString&) override;
-    virtual void labelChanged(TrackPrivateBase*, const AtomicString&) override;
-    virtual void languageChanged(TrackPrivateBase*, const AtomicString&) override;
-    virtual void willRemove(TrackPrivateBase*) override;
+    virtual bool isInband() const OVERRIDE FINAL { return true; }
+    virtual void idChanged(TrackPrivateBase*, const AtomicString&) OVERRIDE;
+    virtual void labelChanged(TrackPrivateBase*, const AtomicString&) OVERRIDE;
+    virtual void languageChanged(TrackPrivateBase*, const AtomicString&) OVERRIDE;
+    virtual void willRemove(TrackPrivateBase*) OVERRIDE;
 
-    virtual void addDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, const void*, unsigned) override { ASSERT_NOT_REACHED(); }
+    virtual void addDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, const void*, unsigned) OVERRIDE { ASSERT_NOT_REACHED(); }
 
 #if ENABLE(DATACUE_VALUE)
-    virtual void addDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, PassRefPtr<SerializedPlatformRepresentation>, const String&) override { ASSERT_NOT_REACHED(); }
-    virtual void updateDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, PassRefPtr<SerializedPlatformRepresentation>) override  { ASSERT_NOT_REACHED(); }
-    virtual void removeDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, PassRefPtr<SerializedPlatformRepresentation>) override  { ASSERT_NOT_REACHED(); }
+    virtual void addDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, PassRefPtr<SerializedPlatformRepresentation>, const String&) OVERRIDE { ASSERT_NOT_REACHED(); }
+    virtual void updateDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, PassRefPtr<SerializedPlatformRepresentation>) OVERRIDE  { ASSERT_NOT_REACHED(); }
+    virtual void removeDataCue(InbandTextTrackPrivate*, const MediaTime&, const MediaTime&, PassRefPtr<SerializedPlatformRepresentation>) OVERRIDE  { ASSERT_NOT_REACHED(); }
 #endif
 
-    virtual void addGenericCue(InbandTextTrackPrivate*, PassRefPtr<GenericCueData>) override { ASSERT_NOT_REACHED(); }
-    virtual void updateGenericCue(InbandTextTrackPrivate*, GenericCueData*) override { ASSERT_NOT_REACHED(); }
-    virtual void removeGenericCue(InbandTextTrackPrivate*, GenericCueData*) override { ASSERT_NOT_REACHED(); }
+    virtual void addGenericCue(InbandTextTrackPrivate*, PassRefPtr<GenericCueData>) OVERRIDE { ASSERT_NOT_REACHED(); }
+    virtual void updateGenericCue(InbandTextTrackPrivate*, GenericCueData*) OVERRIDE { ASSERT_NOT_REACHED(); }
+    virtual void removeGenericCue(InbandTextTrackPrivate*, GenericCueData*) OVERRIDE { ASSERT_NOT_REACHED(); }
 
-    virtual void parseWebVTTFileHeader(InbandTextTrackPrivate*, String) override { ASSERT_NOT_REACHED(); }
-    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const char*, unsigned) override { ASSERT_NOT_REACHED(); }
-    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const ISOWebVTTCue&) override { ASSERT_NOT_REACHED(); }
+    virtual void parseWebVTTFileHeader(InbandTextTrackPrivate*, String) OVERRIDE { ASSERT_NOT_REACHED(); }
+    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const char*, unsigned) OVERRIDE { ASSERT_NOT_REACHED(); }
+    virtual void parseWebVTTCueData(InbandTextTrackPrivate*, const ISOWebVTTCue&) OVERRIDE { ASSERT_NOT_REACHED(); }
 
     virtual MediaTime startTimeVariance() const;
 
 #if USE(PLATFORM_TEXT_TRACK_MENU)
-    virtual InbandTextTrackPrivate* privateTrack() override { return m_private.get(); }
+    virtual InbandTextTrackPrivate* privateTrack() OVERRIDE { return m_private.get(); }
 #endif
 };
 

@@ -34,7 +34,7 @@
 #include "HTMLMediaElement.h"
 #include "InbandTextTrackPrivate.h"
 #include "Logging.h"
-#include <runtime/ArrayBuffer.h>
+#include <wtf/ArrayBuffer.h>
 
 namespace WebCore {
 

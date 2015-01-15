@@ -31,6 +31,14 @@
 #include <glib.h>
 #include <gst/gst.h>
 #include <gst/pbutils/install-plugins.h>
+
+#if ENABLE(VIDEO_TRACK)
+#include "AudioTrackPrivateGStreamer.h"
+#include "InbandMetadataTextTrackPrivateGStreamer.h"
+#include "InbandTextTrackPrivateGStreamer.h"
+#include "VideoTrackPrivateGStreamer.h"
+#endif
+
 #include <wtf/Forward.h>
 
 #if ENABLE(VIDEO_TRACK) && USE(GSTREAMER_MPEGTS)
@@ -223,6 +231,7 @@ private:
     bool m_hasAudio;
     guint m_audioTimerHandler;
     guint m_videoTimerHandler;
+    guint m_textTimerHandler;
     GRefPtr<GstElement> m_webkitAudioSink;
     mutable unsigned long long m_totalBytes;
     KURL m_url;

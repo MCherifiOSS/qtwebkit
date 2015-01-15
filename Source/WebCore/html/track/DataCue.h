@@ -30,10 +30,11 @@
 #if ENABLE(VIDEO_TRACK)
 
 #include "TextTrackCue.h"
-#include <runtime/ArrayBuffer.h>
-#include <runtime/JSCInlines.h>
+#include <wtf/ArrayBuffer.h>
+//#include <runtime/JSCInlines.h>
 #include <wtf/MediaTime.h>
 #include <wtf/RefCounted.h>
+#include <wtf/RefPtr.h>
 
 #if ENABLE(DATACUE_VALUE)
 #include "SerializedPlatformRepresentation.h"
@@ -45,19 +46,19 @@ class ScriptExecutionContext;
 
 class DataCue FINAL : public TextTrackCue {
 public:
-    static Ref<DataCue> create(ScriptExecutionContext& context, const MediaTime& start, const MediaTime& end, ArrayBuffer* data, ExceptionCode& ec)
+    static RefPtr<DataCue> create(ScriptExecutionContext& context, const MediaTime& start, const MediaTime& end, ArrayBuffer* data, ExceptionCode& ec)
     {
-        return adoptRef(*new DataCue(context, start, end, data, emptyString(), ec));
+        return adoptRef(new DataCue(context, start, end, data, emptyString(), ec));
     }
 
-    static Ref<DataCue> create(ScriptExecutionContext& context, const MediaTime& start, const MediaTime& end, const void* data, unsigned length)
+    static RefPtr<DataCue> create(ScriptExecutionContext& context, const MediaTime& start, const MediaTime& end, const void* data, unsigned length)
     {
-        return adoptRef(*new DataCue(context, start, end, data, length));
+        return adoptRef(new DataCue(context, start, end, data, length));
     }
 
-    static Ref<DataCue> create(ScriptExecutionContext& context, const MediaTime& start, const MediaTime& end, ArrayBuffer* data, const String& type, ExceptionCode& ec)
+    static RefPtr<DataCue> create(ScriptExecutionContext& context, const MediaTime& start, const MediaTime& end, ArrayBuffer* data, const String& type, ExceptionCode& ec)
     {
-        return adoptRef(*new DataCue(context, start, end, data, type, ec));
+        return adoptRef(new DataCue(context, start, end, data, type, ec));
     }
 
 #if ENABLE(DATACUE_VALUE)

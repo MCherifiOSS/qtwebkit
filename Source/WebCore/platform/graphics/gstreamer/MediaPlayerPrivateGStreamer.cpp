@@ -50,12 +50,8 @@
 #endif
 
 #if ENABLE(VIDEO_TRACK)
-#include "AudioTrackPrivateGStreamer.h"
-#include "InbandMetadataTextTrackPrivateGStreamer.h"
-#include "InbandTextTrackPrivateGStreamer.h"
 #include "TextCombinerGStreamer.h"
 #include "TextSinkGStreamer.h"
-#include "VideoTrackPrivateGStreamer.h"
 #endif
 
 #if ENABLE(VIDEO_TRACK) && USE(GSTREAMER_MPEGTS)
@@ -757,7 +753,8 @@ void MediaPlayerPrivateGStreamer::notifyPlayerOfVideo()
     }
 #endif
 
-    m_player->client().mediaPlayerEngineUpdated(m_player);
+    ASSERT(m_player->mediaPlayerClient());
+    m_player->mediaPlayerClient()->mediaPlayerEngineUpdated(m_player);
     // m_videoTimerHandler = 0;
 
     // gint videoTracks = 0;
@@ -814,7 +811,8 @@ void MediaPlayerPrivateGStreamer::notifyPlayerOfAudio()
     }
 #endif
 
-    m_player->client().mediaPlayerEngineUpdated(m_player);
+    ASSERT(m_player->mediaPlayerClient());
+    m_player->mediaPlayerClient()->mediaPlayerEngineUpdated(m_player);
     // m_audioTimerHandler = 0;
 
     // gint audioTracks = 0;
@@ -827,7 +825,10 @@ void MediaPlayerPrivateGStreamer::notifyPlayerOfAudio()
 #if ENABLE(VIDEO_TRACK)
 void MediaPlayerPrivateGStreamer::textChanged()
 {
-    m_textTimerHandler.schedule("[WebKit] MediaPlayerPrivateGStreamer::textChanged", std::function<void()>(std::bind(&MediaPlayerPrivateGStreamer::notifyPlayerOfText, this)));
+    if (m_textTimerHandler)
+        g_source_remove(m_textTimerHandler);
+    m_textTimerHandler = g_idle_add_full(G_PRIORITY_DEFAULT, reinterpret_cast<GSourceFunc>(mediaPlayerPrivateTextChangedCallback), this, 0);
+    g_source_set_name_by_id(m_textTimerHandler, "[WebKit] mediaPlayerPrivateTextChangeCallback");
 }
 
 void MediaPlayerPrivateGStreamer::notifyPlayerOfText()

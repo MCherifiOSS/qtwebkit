@@ -113,7 +113,7 @@ void InbandGenericTextTrack::updateCueFromCueData(TextTrackCueGeneric* cue, Gene
     cue->setStartTime(cueData->startTime());
     MediaTime endTime = cueData->endTime();
     if (endTime.isPositiveInfinite() && mediaElement())
-        endTime = mediaElement()->durationMediaTime();
+        endTime = mediaElement()->duration();
     cue->setEndTime(endTime);
     cue->setText(cueData->content());
     cue->setId(cueData->id());
@@ -219,7 +219,7 @@ void InbandGenericTextTrack::parseWebVTTFileHeader(InbandTextTrackPrivate* track
 
 void InbandGenericTextTrack::newCuesParsed()
 {
-    Vector<RefPtr<WebVTTCueData>> cues;
+    Vector<RefPtr<WebVTTCueData> > cues;
     parser().getNewCues(cues);
 
     for (auto& cueData : cues) {

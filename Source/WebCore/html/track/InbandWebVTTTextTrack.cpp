@@ -75,7 +75,7 @@ void InbandWebVTTTextTrack::parseWebVTTCueData(InbandTextTrackPrivate* trackPriv
 
 void InbandWebVTTTextTrack::newCuesParsed()
 {
-    Vector<RefPtr<WebVTTCueData>> cues;
+    Vector<RefPtr<WebVTTCueData> > cues;
     parser().getNewCues(cues);
 
     for (auto& cueData : cues) {
