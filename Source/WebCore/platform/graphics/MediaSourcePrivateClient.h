@@ -45,6 +45,7 @@ public:
     virtual double duration() const = 0;
     virtual PassOwnPtr<PlatformTimeRanges> buffered() const = 0;
     virtual void seekToTime(const MediaTime&) = 0;
+    virtual void setTracksAvailable(bool tracksAvailable) = 0;
 };
 
 }

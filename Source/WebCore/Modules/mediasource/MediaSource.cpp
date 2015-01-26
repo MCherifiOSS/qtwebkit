@@ -80,6 +80,7 @@ MediaSource::MediaSource(ScriptExecutionContext* context)
     , m_pendingSeekTime(MediaTime::invalidTime())
     , m_readyState(closedKeyword())
     , m_asyncEventQueue(GenericEventQueue::create(this))
+    , m_tracksAvailable(false)
 {
     LOG(MediaSource, "MediaSource::MediaSource %p", this);
     m_sourceBuffers = SourceBufferList::create(scriptExecutionContext());
@@ -330,6 +331,16 @@ void MediaSource::monitorSourceBuffers()
         completeSeek();
 
     // 4. Abort these steps.
+}
+
+bool MediaSource::isTracksAvailable()
+{
+    return m_tracksAvailable;
+}
+
+void MediaSource::setTracksAvailable(bool tracksAvailable)
+{
+    m_tracksAvailable = tracksAvailable;
 }
 
 void MediaSource::setDuration(double duration, ExceptionCode& ec)

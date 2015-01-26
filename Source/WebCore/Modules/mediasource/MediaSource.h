@@ -75,6 +75,8 @@ public:
     virtual double duration() const;
     virtual PassOwnPtr<PlatformTimeRanges> buffered() const;
     virtual void seekToTime(const MediaTime&);
+    virtual void setTracksAvailable(bool tracksAvailable);
+    virtual bool isTracksAvailable();
 
     bool attachToElement(HTMLMediaElement*);
     void close();
@@ -140,6 +142,7 @@ protected:
     MediaTime m_pendingSeekTime;
     AtomicString m_readyState;
     OwnPtr<GenericEventQueue> m_asyncEventQueue;
+    bool m_tracksAvailable;
 
 private:
     virtual EventTargetData* eventTargetData() OVERRIDE;

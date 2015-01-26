@@ -171,6 +171,7 @@ private:
 
     void appendBufferInternal(unsigned char*, unsigned, ExceptionCode&);
     void appendBufferTimerFired(Timer<SourceBuffer>*);
+    void updateWhenTracksTimerFired(Timer<SourceBuffer>*);
 
     void setActive(bool);
 
@@ -202,6 +203,7 @@ private:
 
     Vector<unsigned char> m_pendingAppendData;
     Timer<SourceBuffer> m_appendBufferTimer;
+    Timer<SourceBuffer> m_updateWhenTracksTimer;
 
 #if ENABLE(VIDEO_TRACK)
     RefPtr<VideoTrackList> m_videoTracks;

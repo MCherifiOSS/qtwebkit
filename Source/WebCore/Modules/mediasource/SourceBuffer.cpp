@@ -111,6 +111,7 @@ SourceBuffer::SourceBuffer(PassRefPtr<SourceBufferPrivate> sourceBufferPrivate, 
     , m_source(source)
     , m_asyncEventQueue(GenericEventQueue::create(this))
     , m_appendBufferTimer(this, &SourceBuffer::appendBufferTimerFired)
+    , m_updateWhenTracksTimer(this, &SourceBuffer::updateWhenTracksTimerFired)
 #if ENABLE(VIDEO_TRACK)
     , m_highestPresentationEndTimestamp(MediaTime::invalidTime())
 #endif
@@ -314,6 +315,7 @@ void SourceBuffer::abortIfUpdating()
 
     // 3.1. Abort the buffer append and stream append loop algorithms if they are running.
     m_appendBufferTimer.stop();
+    m_updateWhenTracksTimer.stop();
     m_pendingAppendData.clear();
 
     m_removeTimer.stop();
@@ -405,6 +407,7 @@ bool SourceBuffer::hasPendingActivity() const
 void SourceBuffer::stop()
 {
     m_appendBufferTimer.stop();
+    m_updateWhenTracksTimer.stop();
     m_removeTimer.stop();
 }
 
@@ -505,6 +508,21 @@ void SourceBuffer::appendBufferTimerFired(Timer<SourceBuffer>*)
     m_pendingAppendData.clear();
 }
 
+void SourceBuffer::updateWhenTracksTimerFired(Timer<SourceBuffer>*)
+{
+    // Run later until tracks are available (so duration can be computed)
+    if (!m_source->isTracksAvailable()) {
+        m_updateWhenTracksTimer.startOneShot(1);
+        return;
+    }
+
+    // 4. Queue a task to fire a simple event named update at this SourceBuffer object.
+    scheduleEvent(eventNames().updateEvent);
+
+    // 5. Queue a task to fire a simple event named updateend at this SourceBuffer object.
+    scheduleEvent(eventNames().updateendEvent);
+}
+
 void SourceBuffer::sourceBufferPrivateAppendComplete(SourceBufferPrivate*, AppendResult result)
 {
     if (isRemoved())
@@ -538,10 +556,8 @@ void SourceBuffer::sourceBufferPrivateAppendComplete(SourceBufferPrivate*, Appen
     m_updating = false;
 
     // 4. Queue a task to fire a simple event named update at this SourceBuffer object.
-    scheduleEvent(eventNames().updateEvent);
-
     // 5. Queue a task to fire a simple event named updateend at this SourceBuffer object.
-    scheduleEvent(eventNames().updateendEvent);
+    m_updateWhenTracksTimer.startOneShot(0);
 
     if (m_source)
         m_source->monitorSourceBuffers();

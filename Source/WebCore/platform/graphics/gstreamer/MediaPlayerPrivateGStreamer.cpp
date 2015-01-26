@@ -759,6 +759,9 @@ void MediaPlayerPrivateGStreamer::notifyPlayerOfVideo()
     }
 #endif
 
+    if (m_mediaSource)
+        m_mediaSource->setTracksAvailable(true);
+
     ASSERT(m_player->mediaPlayerClient());
     m_player->mediaPlayerClient()->mediaPlayerEngineUpdated(m_player);
     // m_videoTimerHandler = 0;
@@ -816,6 +819,9 @@ void MediaPlayerPrivateGStreamer::notifyPlayerOfAudio()
         m_player->removeAudioTrack(track.release());
     }
 #endif
+
+    if (m_mediaSource)
+        m_mediaSource->setTracksAvailable(true);
 
     ASSERT(m_player->mediaPlayerClient());
     m_player->mediaPlayerClient()->mediaPlayerEngineUpdated(m_player);
