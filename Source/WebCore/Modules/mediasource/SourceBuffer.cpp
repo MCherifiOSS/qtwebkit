@@ -55,11 +55,53 @@
 #include <runtime/VM.h>
 #include <wtf/CurrentTime.h>
 #include <wtf/NeverDestroyed.h>
+
+// ### DEBUG ###
+#undef LOG_DISABLED
+#undef LOG
+#define LOG_DISABLED 0
+#define LOG(channel, format, ...) printf(format "\n", __VA_ARGS__);
+
 #if !LOG_DISABLED
 #include <wtf/text/StringBuilder.h>
 #endif
 
 namespace WebCore {
+
+// ### DEBUG ###
+static void printSampleMap(const char *title, SampleMap *sm)
+{
+        char buffer[1024] = { 0 };
+        char *s = buffer;
+        int i = 0;
+        for (DecodeOrderSampleMap::iterator iter = sm->decodeOrder().begin(); iter != sm->decodeOrder().end(); iter++) {
+            double rangeStart = iter->first.first.toDouble();
+            double rangeEnd = iter->first.second.toDouble();
+            s += sprintf(s, "[%f, %f] ", rangeStart, rangeEnd);
+            i++;
+        }
+        printf("%s: %d %s\n", title, i, buffer);
+}
+
+static void printTimeRanges(const char *title, const TimeRanges *tr)
+{
+        char buffer[1024] = { 0 };
+        char *s = buffer;
+        for (int i = 0; i < tr->length(); i++) {
+            s += sprintf(buffer, "[%f, %f] ", tr->start(i, ASSERT_NO_EXCEPTION), tr->end(i, ASSERT_NO_EXCEPTION));
+        }
+        printf("%s: %d %s\n", title, tr->length(), buffer);
+}
+
+static void printPlatformTimeRanges(const char *title, const PlatformTimeRanges *ptr)
+{
+        char buffer[1024] = { 0 };
+        char *s = buffer;
+        for (int i = 0; i < ptr->length(); i++) {
+            s += sprintf(buffer, "[%f, %f] ", ptr->start(i).toDouble(), ptr->end(i).toDouble());
+        }
+        printf("%s: %d %s\n", title, ptr->length(), buffer);
+}
 
 static double ExponentialMovingAverageCoefficient = 0.1;
 
@@ -974,6 +1016,8 @@ void SourceBuffer::sourceBufferPrivateDidReceiveInitializationSegment(SourceBuff
 
     LOG(MediaSource, "SourceBuffer::sourceBufferPrivateDidReceiveInitializationSegment(%p)", this);
 
+    printf("m_source->duration() = %f\n", m_source->duration());
+
     // 3.5.7 Initialization Segment Received
     // https://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html#sourcebuffer-init-segment-received
     // 1. Update the duration attribute if it currently equals NaN:
@@ -983,6 +1027,9 @@ void SourceBuffer::sourceBufferPrivateDidReceiveInitializationSegment(SourceBuff
         // ↳ Otherwise:
         //   Run the duration change algorithm with new duration set to positive Infinity.
         MediaTime newDuration = segment.duration.isValid() ? segment.duration : MediaTime::positiveInfiniteTime();
+
+        printf("newDuration = %f\n", newDuration.toDouble());
+
         m_source->setDurationInternal(newDuration);
     }
 
@@ -1214,6 +1261,8 @@ void SourceBuffer::sourceBufferPrivateDidReceiveInitializationSegment(SourceBuff
         m_private->setReadyState(MediaPlayer::HaveMetadata);
 
     invalidateBuffered();
+
+    printTimeRanges("m_buffered", buffered().get());
 }
 
 bool SourceBuffer::validateInitializationSegment(const InitializationSegment& segment)
@@ -1303,6 +1352,8 @@ public:
 void SourceBuffer::sourceBufferPrivateDidReceiveSample(SourceBufferPrivate*, PassRefPtr<MediaSample> prpSample)
 {
 #if ENABLE(VIDEO_TRACK)
+    printf("SourceBuffer::sourceBufferPrivateDidReceiveSample(%p)\n", this);
+    printf("m_source->duration() = %f\n", m_source->duration());
     if (isRemoved())
         return;
 
@@ -1501,6 +1552,9 @@ void SourceBuffer::sourceBufferPrivateDidReceiveSample(SourceBufferPrivate*, Pas
             } while(false);
         }
 
+        // DEBUG
+        printSampleMap("erasedSamples", &erasedSamples);
+
         // 1.16 Remove decoding dependencies of the coded frames removed in the previous step:
         DecodeOrderSampleMap::MapType dependentSamples;
         if (!erasedSamples.empty()) {
@@ -1568,6 +1622,8 @@ void SourceBuffer::sourceBufferPrivateDidReceiveSample(SourceBufferPrivate*, Pas
             trackBuffer.m_buffered->add(0.0, fakeRangeEnd);
         }
 
+        printf("Adding range [%f, %f]\n", presentationTimestamp.toDouble(), (presentationTimestamp + frameDuration + microsecond).toDouble());
+
         trackBuffer.m_buffered->add(presentationTimestamp.toDouble(), (presentationTimestamp + frameDuration + microsecond).toDouble());
         m_bufferedSinceLastMonitor += frameDuration.toDouble();
 
@@ -1582,6 +1638,9 @@ void SourceBuffer::sourceBufferPrivateDidReceiveSample(SourceBufferPrivate*, Pas
         m_source->setDurationInternal(highestPresentationEndTimestamp());
 
     invalidateBuffered();
+
+    printf("New m_source->duration() = %f\n", m_source->duration());
+    printTimeRanges("m_buffered", buffered().get());
 #endif
 }
 

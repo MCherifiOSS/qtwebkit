@@ -41,6 +41,9 @@
 #include "NotImplemented.h"
 #include "WebKitMediaSourceGStreamer.h"
 
+// DEBUG
+#include <stdio.h>
+
 namespace WebCore {
 
 PassRefPtr<SourceBufferPrivateGStreamer> SourceBufferPrivateGStreamer::create(MediaSourceGStreamer* mediaSource, PassRefPtr<MediaSourceClientGStreamer> client, const ContentType& contentType)
