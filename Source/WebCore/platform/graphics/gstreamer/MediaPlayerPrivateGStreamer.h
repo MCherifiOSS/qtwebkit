@@ -178,7 +178,7 @@ private:
     void updatePlaybackRate();
 
     virtual String engineDescription() const { return "GStreamer"; }
-    virtual bool isLiveStream() const { return m_isStreaming; }
+    virtual bool isLiveStream() const { return true; }
     virtual bool didPassCORSAccessCheck() const;
 
 #if ENABLE(ENCRYPTED_MEDIA_V2)
