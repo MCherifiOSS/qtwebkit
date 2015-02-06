@@ -242,13 +242,14 @@ void MediaSource::monitorSourceBuffers()
 {
     // 2.4.4 SourceBuffer Monitoring
     // https://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html#buffer-monitoring
-
+    LOG(MediaSource, "monitorSourceBuffers()");
     // Note, the behavior if activeSourceBuffers is empty is undefined.
     if (!m_activeSourceBuffers) {
         m_private->setReadyState(MediaPlayer::HaveNothing);
         return;
     }
 
+    LOG(MediaSource, "monitorSourceBuffers() - checking active source buffers");
     // ↳ If buffered for all objects in activeSourceBuffers do not contain TimeRanges for the current
     // playback position:
     bool noneHasCurrentTime = true;
@@ -259,6 +260,8 @@ void MediaSource::monitorSourceBuffers()
           break;
         }
     }
+
+    LOG(MediaSource, "monitorSourceBuffers() - noneHasCurrentTime: %d", noneHasCurrentTime);
     if (noneHasCurrentTime) {
         // 1. Set the HTMLMediaElement.readyState attribute to HAVE_METADATA.
         // 2. If this is the first transition to HAVE_METADATA, then queue a task to fire a simple event
@@ -279,6 +282,7 @@ void MediaSource::monitorSourceBuffers()
           break;
         }
     }
+    LOG(MediaSource, "monitorSourceBuffers() - allCanPlayThrough: %d", allCanPlayThrough);
     if (allCanPlayThrough) {
         // 1. Set the HTMLMediaElement.readyState attribute to HAVE_ENOUGH_DATA.
         // 2. Queue a task to fire a simple event named canplaythrough at the media element.
@@ -302,6 +306,7 @@ void MediaSource::monitorSourceBuffers()
           break;
         }
     }
+    LOG(MediaSource, "monitorSourceBuffers() - allHaveFutureTime: %d", allHaveFutureTime);
     if (allHaveFutureTime) {
         // 1. Set the HTMLMediaElement.readyState attribute to HAVE_FUTURE_DATA.
         // 2. If the previous value of HTMLMediaElement.readyState was less than HAVE_FUTURE_DATA, then queue a task to fire a simple event named canplay at the media element.
