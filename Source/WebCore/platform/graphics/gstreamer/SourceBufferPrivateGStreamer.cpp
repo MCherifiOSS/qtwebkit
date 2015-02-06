@@ -78,8 +78,8 @@ void SourceBufferPrivateGStreamer::append(const unsigned char* data, unsigned le
         if (m_sourceBufferPrivateClient)
             m_sourceBufferPrivateClient->sourceBufferPrivateAppendComplete(this, SourceBufferPrivateClient::ReadStreamFailed);
     } else {
-        if (m_sourceBufferPrivateClient)
-            m_sourceBufferPrivateClient->sourceBufferPrivateAppendComplete(this, SourceBufferPrivateClient::AppendSucceeded);
+        // if (m_sourceBufferPrivateClient)
+        //     m_sourceBufferPrivateClient->sourceBufferPrivateAppendComplete(this, SourceBufferPrivateClient::AppendSucceeded);
     }
 }
 
